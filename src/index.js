@@ -24,16 +24,6 @@ var currentQuestion;
 var score;
 var usedKeys = [];
 
-var requestUri = 'http://api-a70.mangahigh.com';
-var sessionKey = 'session_a70';
-var levelId = 1;
-var userId;
-var userSessionId;
-var gameSessionId;
-var schoolLoginId = 10;
-var userLoginId = 3;
-var userLoginPassword = 'panda677';
-
 exports.handler = function(event, context, callback){
   var alexa_one = Alexa.handler(event, context);
   alexa_one.registerHandlers(handlers, menuHandlers, triviaHandlers);
@@ -46,9 +36,6 @@ var handlers =  {
   "LaunchRequest": function() {
     var alexa = this;
     this.handler.state = states.MENU;
-    api.login(schoolLoginId, userLoginId, userLoginPassword, function (playerId, sessionId) {
-      userId = playerId;
-      userSessionId = sessionId;
       alexa.emitWithState('NewSession');
     }
   );
@@ -88,8 +75,6 @@ var menuHandlers = Alexa.CreateStateHandler(states.MENU, {
     questionNumber = 1;
     score = 0;
     this.handler.state = states.TRIVIA;
-    api.getGameSessionId(levelId, userSessionId, userId, function(gameSessionId2) {
-      gameSessionId = gameSessionId2;
       usedKeys = [];
       alexa.emitWithState('QuestionIntent', messages.INSTRUCTIONS_MESSAGE);
     }
@@ -107,7 +92,6 @@ var menuHandlers = Alexa.CreateStateHandler(states.MENU, {
   var repromptSpeech = 'To play a new quiz, ' + messages.LEVEL_PROMPT ;
 
   if (questionNumber > QUESTION_TOTAL) {
-    api.sendResults(levelId, userSessionId, userId, score, gameSessionId, helpers.getMedal(score), function() {
       alexa.emit(':askWithCard', message + '! We have just saved your results to mangahigh.', repromptSpeech, cardTitle, cardContent);
     });
   } else {
