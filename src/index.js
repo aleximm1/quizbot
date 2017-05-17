@@ -36,18 +36,16 @@ var handlers =  {
   "LaunchRequest": function() {
     var alexa = this;
     this.handler.state = states.MENU;
-      alexa.emitWithState('NewSession');
-    }
-  );
-},
+    alexa.emitWithState('NewSession');
+  },
 
-"UnhandledIntent": function() {
-  this.emit(':ask', messages.GENERAL_UNHANDLED_MESSAGE);
-},
+  "UnhandledIntent": function() {
+    this.emit(':ask', messages.GENERAL_UNHANDLED_MESSAGE);
+  },
 
-"Unhandled": function() {
-  this.emit(':ask', messages.GENERAL_UNHANDLED_MESSAGE);
-}
+  "Unhandled": function() {
+    this.emit(':ask', messages.GENERAL_UNHANDLED_MESSAGE);
+  }
 };
 
 var menuHandlers = Alexa.CreateStateHandler(states.MENU, {
@@ -75,11 +73,9 @@ var menuHandlers = Alexa.CreateStateHandler(states.MENU, {
     questionNumber = 1;
     score = 0;
     this.handler.state = states.TRIVIA;
-      usedKeys = [];
-      alexa.emitWithState('QuestionIntent', messages.INSTRUCTIONS_MESSAGE);
-    }
-  );
-},
+    usedKeys = [];
+    alexa.emitWithState('QuestionIntent', messages.INSTRUCTIONS_MESSAGE);
+  },
 
 "AMAZON.HelpIntent": function() {
   this.emit(':ask', messages.MENU_HELP_MESSAGE);
@@ -92,8 +88,7 @@ var menuHandlers = Alexa.CreateStateHandler(states.MENU, {
   var repromptSpeech = 'To play a new quiz, ' + messages.LEVEL_PROMPT ;
 
   if (questionNumber > QUESTION_TOTAL) {
-      alexa.emit(':askWithCard', message + '!', repromptSpeech, cardTitle, cardContent);
-    });
+    alexa.emit(':askWithCard', message + '!', repromptSpeech, cardTitle, cardContent);
   } else {
     alexa.emit(':ask', messages.MENU_HELP_MESSAGE);
   }
