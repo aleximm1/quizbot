@@ -88,11 +88,11 @@ var menuHandlers = Alexa.CreateStateHandler(states.MENU, {
 "MenuIntent": function(message) {
   var alexa = this;
   var cardTitle = 'Quizbot Results Card';
-  var cardContent = 'Your score for this quiz was ' + score + '/' + QUESTION_TOTAL + '. Please log in to Mangahigh to check your progess.';
+  var cardContent = 'Your score for this quiz was ' + score + '/' + QUESTION_TOTAL + '.';
   var repromptSpeech = 'To play a new quiz, ' + messages.LEVEL_PROMPT ;
 
   if (questionNumber > QUESTION_TOTAL) {
-      alexa.emit(':askWithCard', message + '! We have just saved your results to mangahigh.', repromptSpeech, cardTitle, cardContent);
+      alexa.emit(':askWithCard', message + '!', repromptSpeech, cardTitle, cardContent);
     });
   } else {
     alexa.emit(':ask', messages.MENU_HELP_MESSAGE);
@@ -115,7 +115,7 @@ var menuHandlers = Alexa.CreateStateHandler(states.MENU, {
 var triviaHandlers = Alexa.CreateStateHandler(states.TRIVIA, {
   "QuestionIntent": function(lastQuestionResult) {
     currentQuestion = helpers.getQuestion(questions, usedKeys);
-    this.emit(':ask', lastQuestionResult + ' Question ' + questionNumber + '. <break time="0.35s"/>' + currentQuestion);
+    this.emit(':ask', lastQuestionResult + '<break time="0.35s"/> Question ' + questionNumber + '. <break time="0.35s"/>' + currentQuestion);
     questionNumber++;
   },
 
@@ -126,7 +126,7 @@ var triviaHandlers = Alexa.CreateStateHandler(states.TRIVIA, {
       score++;
       if (questionNumber > QUESTION_TOTAL) {
         this.handler.state = states.MENU;
-        this.emitWithState('MenuIntent', helpers.getAnswerReply(correctAnswerMessages) + ' You have scored ' + score + ' out of ' + QUESTION_TOTAL);
+        this.emitWithState('MenuIntent', helpers.getAnswerReply(correctAnswerMessages) + '<break time="0.35s"/> You have scored ' + score + ' out of ' + QUESTION_TOTAL);
       } else {
         this.emitWithState('QuestionIntent', helpers.getAnswerReply(correctAnswerMessages));
       }
@@ -134,7 +134,7 @@ var triviaHandlers = Alexa.CreateStateHandler(states.TRIVIA, {
     } else {
       if (questionNumber > QUESTION_TOTAL) {
         this.handler.state = states.MENU;
-        this.emitWithState('MenuIntent', helpers.getAnswerReply(incorrectAnswerMessages) + ' You have scored ' + score + ' out of ' + QUESTION_TOTAL);
+        this.emitWithState('MenuIntent', helpers.getAnswerReply(incorrectAnswerMessages) + '<break time="0.35s"/> You have scored ' + score + ' out of ' + QUESTION_TOTAL);
       } else {
         this.emitWithState('QuestionIntent', helpers.getAnswerReply(incorrectAnswerMessages));
       }
